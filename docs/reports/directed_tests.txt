@@ -1,0 +1,18 @@
+# make directed, run 2026-10-10, against rv32i-soc-asic at its published v1.0 commit.
+# Each directed program runs on Spike and the reference model first (the 'spike' lines; the
+# interrupt and SoC-register programs need SoC devices Spike lacks), then on the RTL in lockstep.
+
+spike  d_csr_ops.elf            MATCH: 230 retirements identical
+spike  d_far_code.elf           MATCH: 109 retirements identical
+spike  d_fence_i.elf            MATCH: 104 retirements identical
+spike  d_hazards.elf            MATCH: 74 retirements identical
+spike  d_mret_mpie.elf          MATCH: 100 retirements identical
+d_csr_ops.elf                RTL PASS     272 cyc CPI 1.157  | lockstep MATCH    235 ret,   8 injected
+d_far_code.elf               RTL PASS     158 cyc CPI 1.436  | lockstep MATCH    110 ret,   0 injected
+d_fence_i.elf                RTL PASS     160 cyc CPI 1.538  | lockstep MATCH    104 ret,   0 injected
+d_hazards.elf                RTL PASS     101 cyc CPI 1.365  | lockstep MATCH     74 ret,   0 injected
+d_irq_soc.elf                RTL PASS    1549 cyc CPI 1.627  | lockstep MATCH    952 ret,   1 injected, 6 interrupts
+d_mmio_regs_soc.elf          RTL PASS     187 cyc CPI 1.375  | lockstep MATCH    136 ret,  11 injected
+d_mret_mpie.elf              RTL PASS     129 cyc CPI 1.265  | lockstep MATCH    102 ret,   0 injected
+d_wfi_soc.elf                RTL PASS      89 cyc CPI 1.328  | lockstep MATCH     67 ret,   1 injected
+8 / 8 programs: RTL passes and matches the ISS in lockstep

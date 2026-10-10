@@ -1,0 +1,27 @@
+# Which Spike --isa string models the rv32i-soc-asic core, run 2026-09-30
+# Spike: riscv-isa-sim 0bff12123b1f (2026-09-28), built from source (--without-boost)
+# riscv-tests d445110 (env 6de71ed). Flags otherwise: --priv=M --pmpregions=0 --triggers=0
+# Each ISA string: ISS vs Spike, lockstep, over the 55 riscv-tests the core runs.
+rv32i_zicsr                  -> 1 diverge: rv32mi-p-zicntr after 68 matching (pc, insn, rd, rd_val)
+rv32i_zicsr_zifencei         -> 1 diverge: rv32mi-p-zicntr after 68 matching
+rv32i_zicsr_zicntr           -> all 55 match
+rv32i_zicsr_zicntr_zifencei  -> all 55 match
+
+# The divergence under rv32i_zicsr: Spike traps on the counter read, the ISS (and the core) do not.
+DIVERGED after 68 matching retirements
+  first mismatch at retirement #68: pc, insn, rd, rd_val
+    spike: pc=80000004 insn=34202f73 x30=00000002
+     iss: pc=800001a0 insn=c0003073
+  preceding (both agreed):
+          pc=80000188 insn=00000297 x5=80000188
+          pc=8000018c insn=01428293 x5=8000019c
+          pc=80000190 insn=34129073
+          pc=80000194 insn=f1402573 x10=00000000
+          pc=80000198 insn=30200073
+          pc=8000019c insn=00200193 x3=00000002
+
+# c0003073 = csrrc x0, cycle, x0. Spike without Zicntr: illegal instruction, handler reads
+# mcause = 2 into x30. rv32i-soc-asic runs rv32mi-zicntr and passes on the RTL, so the core has Zicntr.
+# fence.i: Spike executes it (0x0000100f appears in the rv32ui-p-fence_i commit log) even
+# without _zifencei in the string, so Zifencei makes no measurable difference on this suite.
+# Decision: --isa=rv32i_zicsr_zicntr_zifencei (all three extensions the core implements).

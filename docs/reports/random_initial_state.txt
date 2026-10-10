@@ -1,0 +1,16 @@
+# make <target> SEED=n, run 2026-10-10, against rv32i-soc-asic at its published v1.0 commit.
+# Every uninitialized RTL bit (Verilator --x-initial unique) randomized with seeds 1-3; each line
+# is the summary of one full run.
+
+seed 1, cosim-all: 111 / 111 programs: RTL passes and matches the ISS in lockstep (seed 1)
+seed 1, directed: 8 / 8 programs: RTL passes and matches the ISS in lockstep (seed 1)
+seed 1, stress: 150 / 150 programs: RTL passes and matches the ISS in lockstep (seed 1)
+seed 1, irq-stress: 50 / 50 programs: RTL passes and matches the ISS in lockstep (seed 1)
+seed 2, cosim-all: 111 / 111 programs: RTL passes and matches the ISS in lockstep (seed 2)
+seed 2, directed: 8 / 8 programs: RTL passes and matches the ISS in lockstep (seed 2)
+seed 2, stress: 150 / 150 programs: RTL passes and matches the ISS in lockstep (seed 2)
+seed 2, irq-stress: 50 / 50 programs: RTL passes and matches the ISS in lockstep (seed 2)
+seed 3, cosim-all: 111 / 111 programs: RTL passes and matches the ISS in lockstep (seed 3)
+seed 3, directed: 8 / 8 programs: RTL passes and matches the ISS in lockstep (seed 3)
+seed 3, stress: 150 / 150 programs: RTL passes and matches the ISS in lockstep (seed 3)
+seed 3, irq-stress: 50 / 50 programs: RTL passes and matches the ISS in lockstep (seed 3)

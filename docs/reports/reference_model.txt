@@ -1,0 +1,61 @@
+# make verify, run 2026-10-10: checks on the reference model and on the checker itself, no RTL involved.
+# 1. Firmware on the reference model alone. Its timer advances once per instruction, so the
+#    benchmark's printed cycle counts here are not performance numbers (the RTL's are in
+#    benchmark_crosscheck.txt).
+# 2. Guided lockstep against a fake RTL with a slow accelerator, CPI 2 and a different marchid:
+#    it must accept those legitimate differences and still catch a planted SRA bug.
+# 3. Nine mutant reference models (classic pipeline bugs); lockstep must catch every one.
+# 4. The Verilator harness against an RVFI stub.
+# 5. Reference model vs Spike: firmware and 20 random programs, then the 55 riscv-tests.
+#    Spike riscv-isa-sim 0bff12123b1f, --isa=rv32i_zicsr_zicntr_zifencei --priv=M --pmpregions=0 --triggers=0.
+
+ISS: PASS, 7531 instructions retired
+ISS: PASS, 12951 instructions retired
+ISS: PASS, 82 instructions retired
+uart: 'rv32i-soc-asic matmul benchmark\r\nresults match over 16 runs, N=4\r\ncycles per multiply (mtime, timer-read overhead removed)\r\n  software (no M ext, __mulsi3): 3363\r\n  accelerator total:             273\r\n    load  32 writes:             159\r\n    run   (incl. polling):       3\r\n    read  16 reads:              111\r\n  speedup vs software multiply:  12.3x\r\n  bus data movement:             98.9% of the accelerated path\r\nBENCH OK\r\n'
+ISS: PASS, 77363 instructions retired
+  lockstep  test_accel     MATCH     12960 retirements, 21 injected
+  offline   test_accel     DIVERGED (expected: RTL-only values)
+  lockstep  test_counters  MATCH       343 retirements, 5 injected
+  offline   test_counters  DIVERGED (expected: RTL-only values)
+  lockstep  test_isa       MATCH      7531 retirements, 0 injected
+  offline   test_isa       MATCH    
+  buggy RTL test_isa       DIVERGED at retirement #162
+PASS: lockstep accepts legitimate RTL differences and still catches bugs
+tb/asm/far_code.S: Assembler messages:
+tb/asm/far_code.S:63: Warning: .space repeat count is zero, ignored
+  killed   C1_sra_as_srl          by test_isa.elf after 162 matching
+  killed   C2_lb_zero_extends     by rand5.elf after 689 matching
+  killed   C3_missing_forward     by rand1.elf after 388 matching
+  killed   C4_bltu_as_blt         by test_isa.elf after 157 matching
+  killed   C5_sh_low_byte_only    by test_isa.elf after 256 matching
+  killed   C6_jalr_lsb_kept       by test_isa.elf after 7513 matching
+  killed   C7_x0_writable         by d_csr_ops.elf after 114 matching
+  killed   C8_slt_as_sltu         by rand1.elf after 401 matching
+  killed   C9_fencei_stale_fetch  by d_fence_i.elf after 55 matching
+killed 9 / 9 over 14 programs
+RTL: PASS, 3 instructions retired (0 traps) in 3 cycles (CPI 1.000)
+harness: RVFI dump parses, 3 records, word-aligned byte store normalized
+test_isa.elf             MATCH: 7531 retirements identical
+rand1.elf                MATCH: 719 retirements identical
+rand2.elf                MATCH: 712 retirements identical
+rand3.elf                MATCH: 698 retirements identical
+rand4.elf                MATCH: 716 retirements identical
+rand5.elf                MATCH: 714 retirements identical
+rand6.elf                MATCH: 688 retirements identical
+rand7.elf                MATCH: 721 retirements identical
+rand8.elf                MATCH: 701 retirements identical
+rand9.elf                MATCH: 706 retirements identical
+rand10.elf               MATCH: 703 retirements identical
+rand11.elf               MATCH: 719 retirements identical
+rand12.elf               MATCH: 701 retirements identical
+rand13.elf               MATCH: 713 retirements identical
+rand14.elf               MATCH: 720 retirements identical
+rand15.elf               MATCH: 701 retirements identical
+rand16.elf               MATCH: 689 retirements identical
+rand17.elf               MATCH: 736 retirements identical
+rand18.elf               MATCH: 724 retirements identical
+rand19.elf               MATCH: 690 retirements identical
+rand20.elf               MATCH: 710 retirements identical
+55 / 55 tests: ISS passes and matches Spike, 17110 retirements identical
+== verify: done ==

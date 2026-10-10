@@ -1,0 +1,22 @@
+# make bench-xcheck, run 2026-10-10, against rv32i-soc-asic at its published v1.0 commit.
+# rv32i-soc-asic's exact benchmark image (its crt0, linker script, main.c and build flags) on
+# rv32i-soc-asic's own Icarus testbench and on this repository's Verilator model, the UART reports
+# compared line by line, and the Verilator trace checked in lockstep. The two run lengths differ by
+# the fixed measuring-point offset of the two testbenches (+2 retirements, -1 cycle).
+
+icarus   (rv32i-soc-asic tb_soc): PASS  cycles=174792 instret=103041
+verilator (cosim_top):        RTL: PASS, 103043 instructions retired (0 traps) in 174791 cycles (CPI 1.696)
+lockstep on the Verilator trace: MATCH 103043 retirements, 9501 RTL values injected
+UART report, Icarus | Verilator:
+     rv32i-soc-asic matmul benchmark                      | rv32i-soc-asic matmul benchmark
+     results match over 16 runs, N=4                      | results match over 16 runs, N=4
+     cycles per multiply (mtime, timer-read overhead removed) | cycles per multiply (mtime, timer-read overhead removed)
+       software (no M ext, __mulsi3): 5075                |   software (no M ext, __mulsi3): 5075
+       accelerator total:             473                 |   accelerator total:             473
+         load  32 writes:             285                 |     load  32 writes:             285
+         run   (incl. polling):       13                  |     run   (incl. polling):       13
+         read  16 reads:              175                 |     read  16 reads:              175
+       speedup vs software multiply:  10.7x               |   speedup vs software multiply:  10.7x
+       bus data movement:             97.2% of the accelerated path |   bus data movement:             97.2% of the accelerated path
+     BENCH OK                                             | BENCH OK
+bench-xcheck: PASS: identical reports, lockstep MATCH

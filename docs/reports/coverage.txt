@@ -1,0 +1,51 @@
+# make coverage, run 2026-10-10, against rv32i-soc-asic at its published v1.0 commit.
+# All 269 lockstep programs on a Verilator build with line and toggle coverage; the memory
+# storage array is excluded (tb/coverage.vlt). verilator_coverage's single 'Total coverage' line
+# mixes kinds and is not used; scripts/cov_summary.py reports line, branch and toggle separately.
+# Architectural coverage (scripts/arch_cov.py) is computed from the RTL's own RVFI traces.
+
+55 / 55 tests: ISS passes and matches Spike, 17110 retirements identical
+269 / 269 programs: RTL passes and matches the ISS in lockstep
+Total coverage (1005/1048) 95.00%
+See lines with '%00' in build/cov/annotate
+
+## RTL coverage per file (scripts/cov_summary.py)
+file                            v_branch            v_line          v_toggle
+apb_fabric.sv                        6/6               4/4           228/286
+apb_gpio.sv                          6/6               7/9           110/139
+apb_master.sv                        3/4               4/4           187/191
+apb_mm_accel.sv                      5/6               7/8           170/173
+apb_timer.sv                         6/6             12/14           182/230
+apb_uart.sv                        51/54             21/22           138/211
+cosim_top.sv                         1/2               2/2           229/379
+mm_accel.sv                        16/16               9/9           353/360
+mm_pe.sv                             2/2               6/6           685/711
+rv32i_alu.sv                           -               9/9           105/105
+rv32i_core.sv                      34/34             60/61         1647/2267
+rv32i_csr.sv                       10/10             40/40           432/707
+rv32i_decode.sv                      2/2             24/24           267/281
+rv32i_fetch.sv                     12/12             12/12           303/469
+rv32i_regfile.sv                     2/2               8/8           113/113
+soc_mem.sv                         15/16               4/4           134/134
+soc_top.sv                           4/4               3/3           683/910
+total v_branch         175/182 = 96.2 %
+total v_line           232/239 = 97.1 %
+total v_toggle         5966/7666 = 77.8 %
+
+## Architectural coverage (scripts/arch_cov.py --holes)
+bin                                            ALL       ALL
+
+summary (bins hit by any set / bins defined):
+  insn       49 /   49
+  raw       108 /  108
+  branch     12 /   12
+  trap        6 /    6
+  adj         6 /    6
+  csr        12 /   12
+  mem        23 /   23
+  mmio        3 /    3
+  x0          2 /    2
+  stall       7 /    7
+  total     228 /  228
+holes: 0
+excluded: adj / trap after trap (0 hits): the retirement after a trap is always the handler's first instruction; making it trap needs a handler whose entry faults, which re-enters itself forever

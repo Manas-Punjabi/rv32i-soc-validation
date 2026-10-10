@@ -1,0 +1,56 @@
+# make irq-stress V=1, run 2026-10-10, against rv32i-soc-asic at its published v1.0 commit.
+# 50 random programs that raise software and timer interrupts at random points. The RTL reports
+# each taken interrupt on the RVFI side band; the reference model checks it was legal and the
+# highest priority pending, then performs the trap entry itself. 573 interrupts in total.
+
+irq1.elf                     RTL PASS    1873 cyc CPI 1.582  | lockstep MATCH   1184 ret,  27 injected, 13 interrupts
+irq2.elf                     RTL PASS    1605 cyc CPI 1.564  | lockstep MATCH   1026 ret,  29 injected, 15 interrupts
+irq3.elf                     RTL PASS    1940 cyc CPI 1.597  | lockstep MATCH   1215 ret,  26 injected, 6 interrupts
+irq4.elf                     RTL PASS    1840 cyc CPI 1.559  | lockstep MATCH   1180 ret,  37 injected, 10 interrupts
+irq5.elf                     RTL PASS    1918 cyc CPI 1.597  | lockstep MATCH   1201 ret,  37 injected, 10 interrupts
+irq6.elf                     RTL PASS    1951 cyc CPI 1.557  | lockstep MATCH   1253 ret,  31 injected, 15 interrupts
+irq7.elf                     RTL PASS    2095 cyc CPI 1.605  | lockstep MATCH   1305 ret,  45 injected, 17 interrupts
+irq8.elf                     RTL PASS    1767 cyc CPI 1.588  | lockstep MATCH   1113 ret,  19 injected, 6 interrupts
+irq9.elf                     RTL PASS    1852 cyc CPI 1.583  | lockstep MATCH   1170 ret,  33 injected, 7 interrupts
+irq10.elf                    RTL PASS    1785 cyc CPI 1.623  | lockstep MATCH   1100 ret,  32 injected, 11 interrupts
+irq11.elf                    RTL PASS    1768 cyc CPI 1.558  | lockstep MATCH   1135 ret,  21 injected, 9 interrupts
+irq12.elf                    RTL PASS    1920 cyc CPI 1.603  | lockstep MATCH   1198 ret,  28 injected, 14 interrupts
+irq13.elf                    RTL PASS    1779 cyc CPI 1.586  | lockstep MATCH   1122 ret,  34 injected, 15 interrupts
+irq14.elf                    RTL PASS    1628 cyc CPI 1.591  | lockstep MATCH   1023 ret,  32 injected, 12 interrupts
+irq15.elf                    RTL PASS    1887 cyc CPI 1.583  | lockstep MATCH   1192 ret,  29 injected, 12 interrupts
+irq16.elf                    RTL PASS    1992 cyc CPI 1.585  | lockstep MATCH   1257 ret,  30 injected, 10 interrupts
+irq17.elf                    RTL PASS    1958 cyc CPI 1.585  | lockstep MATCH   1235 ret,  37 injected, 17 interrupts
+irq18.elf                    RTL PASS    1949 cyc CPI 1.599  | lockstep MATCH   1219 ret,  25 injected, 6 interrupts
+irq19.elf                    RTL PASS    2003 cyc CPI 1.608  | lockstep MATCH   1246 ret,  47 injected, 13 interrupts
+irq20.elf                    RTL PASS    2150 cyc CPI 1.600  | lockstep MATCH   1344 ret,  35 injected, 13 interrupts
+irq21.elf                    RTL PASS    1676 cyc CPI 1.580  | lockstep MATCH   1061 ret,  38 injected, 12 interrupts
+irq22.elf                    RTL PASS    1868 cyc CPI 1.599  | lockstep MATCH   1168 ret,  34 injected, 5 interrupts
+irq23.elf                    RTL PASS    1814 cyc CPI 1.587  | lockstep MATCH   1143 ret,  26 injected, 12 interrupts
+irq24.elf                    RTL PASS    1699 cyc CPI 1.588  | lockstep MATCH   1070 ret,  30 injected, 11 interrupts
+irq25.elf                    RTL PASS    2026 cyc CPI 1.626  | lockstep MATCH   1246 ret,  40 injected, 14 interrupts
+irq26.elf                    RTL PASS    2115 cyc CPI 1.624  | lockstep MATCH   1302 ret,  35 injected, 13 interrupts
+irq27.elf                    RTL PASS    1630 cyc CPI 1.567  | lockstep MATCH   1040 ret,  38 injected, 8 interrupts
+irq28.elf                    RTL PASS    1764 cyc CPI 1.607  | lockstep MATCH   1098 ret,  43 injected, 4 interrupts
+irq29.elf                    RTL PASS    1872 cyc CPI 1.621  | lockstep MATCH   1155 ret,  28 injected, 15 interrupts
+irq30.elf                    RTL PASS    1731 cyc CPI 1.517  | lockstep MATCH   1141 ret,  25 injected, 6 interrupts
+irq31.elf                    RTL PASS    2129 cyc CPI 1.598  | lockstep MATCH   1332 ret,  36 injected, 14 interrupts
+irq32.elf                    RTL PASS    2011 cyc CPI 1.586  | lockstep MATCH   1268 ret,  36 injected, 12 interrupts
+irq33.elf                    RTL PASS    2106 cyc CPI 1.613  | lockstep MATCH   1306 ret,  37 injected, 13 interrupts
+irq34.elf                    RTL PASS    1703 cyc CPI 1.552  | lockstep MATCH   1097 ret,  28 injected, 5 interrupts
+irq35.elf                    RTL PASS    2040 cyc CPI 1.589  | lockstep MATCH   1284 ret,  33 injected, 12 interrupts
+irq36.elf                    RTL PASS    1905 cyc CPI 1.593  | lockstep MATCH   1196 ret,  45 injected, 10 interrupts
+irq37.elf                    RTL PASS    1850 cyc CPI 1.515  | lockstep MATCH   1221 ret,  24 injected, 9 interrupts
+irq38.elf                    RTL PASS    1750 cyc CPI 1.606  | lockstep MATCH   1090 ret,  41 injected, 12 interrupts
+irq39.elf                    RTL PASS    2072 cyc CPI 1.612  | lockstep MATCH   1285 ret,  19 injected, 10 interrupts
+irq40.elf                    RTL PASS    2047 cyc CPI 1.630  | lockstep MATCH   1256 ret,  21 injected, 11 interrupts
+irq41.elf                    RTL PASS    1729 cyc CPI 1.566  | lockstep MATCH   1104 ret,  26 injected, 11 interrupts
+irq42.elf                    RTL PASS    1800 cyc CPI 1.626  | lockstep MATCH   1107 ret,  28 injected, 8 interrupts
+irq43.elf                    RTL PASS    1880 cyc CPI 1.586  | lockstep MATCH   1185 ret,  44 injected, 15 interrupts
+irq44.elf                    RTL PASS    1839 cyc CPI 1.581  | lockstep MATCH   1163 ret,  65 injected, 14 interrupts
+irq45.elf                    RTL PASS    1767 cyc CPI 1.590  | lockstep MATCH   1111 ret,  41 injected, 10 interrupts
+irq46.elf                    RTL PASS    1918 cyc CPI 1.596  | lockstep MATCH   1202 ret,  36 injected, 9 interrupts
+irq47.elf                    RTL PASS    1894 cyc CPI 1.629  | lockstep MATCH   1163 ret,  28 injected, 17 interrupts
+irq48.elf                    RTL PASS    1967 cyc CPI 1.614  | lockstep MATCH   1219 ret,  27 injected, 16 interrupts
+irq49.elf                    RTL PASS    1880 cyc CPI 1.628  | lockstep MATCH   1155 ret,  38 injected, 23 interrupts
+irq50.elf                    RTL PASS    1918 cyc CPI 1.594  | lockstep MATCH   1203 ret,  20 injected, 11 interrupts
+50 / 50 programs: RTL passes and matches the ISS in lockstep

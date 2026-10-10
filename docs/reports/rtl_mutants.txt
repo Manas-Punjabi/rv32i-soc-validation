@@ -1,0 +1,38 @@
+# make mutate-rtl, run 2026-10-10, against rv32i-soc-asic at its published v1.0 commit.
+# rv32i-soc-asic's 28 RTL mutants (read from its scripts/mutate_core.sh), each applied to a scratch
+# copy of the RTL and run against all 319 programs in lockstep. A baseline run on the unmutated
+# design must pass first. Each line: how many programs caught the mutant, and the first one with
+# the retirement where lockstep diverged.
+
+55 / 55 tests: ISS passes and matches Spike, 17110 retirements identical
+28 mutants x 319 programs
+baseline: all 319 programs pass on the unmutated design
+  killed   M1_no_mem_fwd_rs1                by 319/319 programs; first rv32mi-p-csr: lockstep diverged at retirement #35  (153 s)
+  killed   M2_no_wb_fwd_rs2                 by 272/319 programs; first rv32mi-p-illegal: lockstep diverged at retirement #87  (8 s)
+  killed   M3_no_load_use_stall             by 265/319 programs; first rv32ui-p-lb: lockstep diverged at retirement #143  (20 s)
+  killed   M4_bge_is_blt                    by 235/319 programs; first rv32ui-p-bge: lockstep diverged at retirement #71  (21 s)
+  killed   M5_jalr_keeps_bit0               by   2/319 programs; first rv32mi-p-ma_fetch: lockstep diverged at retirement #106  (8 s)
+  killed   M6_no_half_misalign              by 193/319 programs; first rv32mi-p-lh-misaligned: lockstep diverged at retirement #82  (6 s)
+  killed   M7_mret_no_mie                   by  35/319 programs; first d_irq_soc.elf: RTL self-check failed, lockstep matched  (6 s)
+  killed   M8_irq_prio_swap                 by   1/319 programs; first d_irq_soc.elf: RTL self-check failed, lockstep matched  (5 s)
+  killed   M9_trap_writes_rd                by 155/319 programs; first rv32mi-p-ma_fetch: lockstep diverged at retirement #89  (7 s)
+  killed   M10_no_rf_bypass                 by 302/319 programs; first rv32mi-p-csr: lockstep diverged at retirement #115  (71 s)
+  killed   M11_sra_is_srl                   by 229/319 programs; first rv32ui-p-lui: lockstep diverged at retirement #74  (8 s)
+  killed   M12_sb_lane0_only                by 256/319 programs; first rv32ui-p-ld_st: lockstep diverged at retirement #90  (6 s)
+  killed   M13_lb_zero_ext                  by  46/319 programs; first rv32mi-p-ma_addr: lockstep diverged at retirement #96  (7 s)
+  killed   M14_ignore_ready                 by 277/319 programs; first rv32mi-p-lh-misaligned: lockstep diverged at retirement #75  (27 s)
+  killed   M15_wb_advances_in_stall         by 279/319 programs; first rv32mi-p-lh-misaligned: lockstep diverged at retirement #75  (77 s)
+  killed   M16_csr_rc_is_rs                 by 191/319 programs; first rv32mi-p-csr: lockstep diverged at retirement #96  (8 s)
+  killed   M17_no_illegal_trap              by 235/319 programs; first rv32mi-p-csr: lockstep diverged at retirement #37  (5 s)
+  killed   M18_rvfi_pc_next_always_plus4    by 319/319 programs; first rv32mi-p-csr: lockstep diverged at retirement #0  (4 s)
+  killed   M19_rvfi_x0_carries_value        by 319/319 programs; first rv32mi-p-csr: malformed trace: rvfi #0: rd_addr 0 with rd_wdata 80000004  (4 s)
+  killed   M20_rvfi_counts_bubbles          by 319/319 programs; first rv32mi-p-csr: lockstep diverged at retirement #0  (4 s)
+  killed   F1_no_issue_credit               by 270/319 programs; first rv32ui-p-lb: lockstep diverged at retirement #95  (61 s)
+  killed   F2_redirect_keeps_q              by 270/319 programs; first rv32mi-p-sh-misaligned: lockstep diverged at retirement #82  (47 s)
+  killed   F3_redirect_keeps_s2             by 319/319 programs; first rv32mi-p-csr: lockstep diverged at retirement #1  (96 s)
+  killed   F4_stale_beat_pc                 by 319/319 programs; first rv32mi-p-csr: lockstep diverged at retirement #0  (97 s)
+  killed   F5_drop_beat_on_stall            by 279/319 programs; first rv32mi-p-lh-misaligned: lockstep diverged at retirement #77  (66 s)
+  killed   F6_redirect_stale_addr           by 319/319 programs; first rv32mi-p-csr: lockstep diverged at retirement #1  (59 s)
+  killed   F7_fencei_no_flush               by   1/319 programs; first d_fence_i.elf: lockstep diverged at retirement #55  (9 s)
+  killed   F8_fencei_no_replay              by   1/319 programs; first d_fence_i.elf: lockstep diverged at retirement #55  (7 s)
+lockstep killed 28 / 28 mutants
