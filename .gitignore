@@ -1,0 +1,6 @@
+# build outputs (make clean removes them)
+build/
+build_*/
+*.vcd
+__pycache__/
+*.pyc
