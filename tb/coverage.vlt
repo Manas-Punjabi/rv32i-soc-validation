@@ -1,0 +1,6 @@
+`verilator_config
+// Coverage build only (make coverage). The flop memory's storage array is 16384 x 32
+// bits of data, not logic: toggling it says nothing about the design, and instrumenting
+// it costs more than the rest of the SoC. Its handshake and read pipeline stay covered.
+// The rv32i-soc-asic RTL is not modified: this is a Verilator configuration file.
+coverage_off -file "*/rtl/mem/soc_mem.sv" -lines 59
