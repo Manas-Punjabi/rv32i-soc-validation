@@ -1,0 +1,50 @@
+name: verify
+
+on: [push, pull_request]
+
+jobs:
+  lockstep:
+    runs-on: ubuntu-24.04
+    env:
+      SPIKE_COMMIT: 0bff12123b1fd510e19e19634dd997dbade70e54
+      RISCV_TESTS_COMMIT: d44511022b356a341a2430cfd65f894b77c35f36
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out rv32i-soc-asic, the design under test
+        uses: actions/checkout@v4
+        with:
+          repository: Manas-Punjabi/rv32i-soc-asic
+          ref: v1.0
+          path: rv32i-soc-asic
+
+      - name: Install Verilator, the RISC-V GCC toolchain and Spike build tools
+        run: sudo apt-get update && sudo apt-get install -y verilator gcc-riscv64-unknown-elf device-tree-compiler
+
+      - name: Restore Spike from cache
+        id: spike-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/opt/spike
+          key: spike-${{ env.SPIKE_COMMIT }}
+
+      - name: Build Spike (first run only)
+        if: steps.spike-cache.outputs.cache-hit != true
+        run: |
+          git clone https://github.com/riscv-software-src/riscv-isa-sim /tmp/riscv-isa-sim
+          git -C /tmp/riscv-isa-sim checkout "$SPIKE_COMMIT"
+          mkdir /tmp/riscv-isa-sim/build && cd /tmp/riscv-isa-sim/build
+          ../configure --prefix="$HOME/opt/spike" --without-boost
+          make -j"$(nproc)" && make install
+
+      - name: Fetch riscv-tests (pinned to the commit used for the published results)
+        run: |
+          git clone https://github.com/riscv-software-src/riscv-tests ~/src/riscv-tests
+          git -C ~/src/riscv-tests checkout "$RISCV_TESTS_COMMIT"
+          git -C ~/src/riscv-tests submodule update --init env
+
+      - name: Reference model vs Spike, checker self-tests
+        run: make verify SOC=rv32i-soc-asic
+
+      - name: Lockstep regression and directed tests on the SoC
+        run: make cosim-all directed SOC=rv32i-soc-asic
